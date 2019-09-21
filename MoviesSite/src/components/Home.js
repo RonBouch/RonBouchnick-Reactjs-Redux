@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
 import Movies from '../data/Movies.json'
 import {Link} from 'react-router-dom'
-
+import { bindActionCreators } from 'redux';
+import {getMovies} from '../actions';
+import { connect } from 'react-redux'
 class Home extends React.Component {
     constructor(props) {
         super(props);
       
     }
    
-
+     componentDidMount (){
+      this.props.getMovies();    
+    }
     
 
     render() {
-     
+      console.log("this.props movie ",this.props.movies)
+      console.log("this.props ",this.props.movies.id)
+
         //save the responses apis and use them locally / data folder!
         let m=Movies.sort(function(a, b) {
             var yearA = a.releaseYear; 
@@ -51,7 +57,19 @@ class Home extends React.Component {
         )
     }
 }
-
+function mapDispatchToProps(dispatch){
+  return{
+    getMovies:bindActionCreators(getMovies,dispatch)
+  }
+}
+function mapStateToProps(state){
+  return{
+    movies:state.movies
+  }
 }
 
-export default Home;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  
+)(Home)
